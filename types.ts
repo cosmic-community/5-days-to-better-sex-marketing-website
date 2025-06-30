@@ -168,7 +168,7 @@ interface Testimonial extends CosmicObject {
 }
 
 // API response types
-interface CosmicResponse<T> {
+interface CosmicResponse<T extends CosmicObject> {
   objects: T[];
   total: number;
   limit: number;
@@ -192,8 +192,16 @@ function isPage(obj: CosmicObject): obj is Page {
   return obj.type_slug === 'pages';
 }
 
-// Utility types
-type OptionalMetadata<T> = Partial<T['metadata']>;
+// Utility types with proper constraints
+type OptionalMetadata<T extends CosmicObject> = Partial<T['metadata']>;
+
+// Helper function to safely access metadata
+function getMetadataProperty<T extends CosmicObject, K extends keyof T['metadata']>(
+  obj: T,
+  key: K
+): T['metadata'][K] {
+  return obj.metadata[key];
+}
 
 export type {
   CosmicObject,
@@ -214,5 +222,6 @@ export {
   isProduct,
   isBlogPost,
   isTestimonial,
-  isPage
+  isPage,
+  getMetadataProperty
 };
