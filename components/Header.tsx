@@ -14,7 +14,54 @@ async function getNavigation(): Promise<NavigationItem[]> {
     return response.objects as NavigationItem[];
   } catch (error) {
     if (hasStatus(error) && error.status === 404) {
-      return [];
+      // Return fallback navigation items when no content exists in Cosmic
+      return [
+        {
+          id: 'temp-1',
+          slug: 'about',
+          title: 'About',
+          type_slug: 'navigation',
+          created_at: '',
+          modified_at: '',
+          metadata: {
+            label: 'About',
+            url: '/about',
+            link_type: 'internal',
+            navigation_group: 'header',
+            order: 1
+          }
+        },
+        {
+          id: 'temp-2',
+          slug: 'course',
+          title: 'Course',
+          type_slug: 'navigation',
+          created_at: '',
+          modified_at: '',
+          metadata: {
+            label: 'Course',
+            url: '#course',
+            link_type: 'internal',
+            navigation_group: 'header',
+            order: 2
+          }
+        },
+        {
+          id: 'temp-3',
+          slug: 'testimonials',
+          title: 'Testimonials',
+          type_slug: 'navigation',
+          created_at: '',
+          modified_at: '',
+          metadata: {
+            label: 'Testimonials',
+            url: '#testimonials',
+            link_type: 'internal',
+            navigation_group: 'header',
+            order: 3
+          }
+        }
+      ] as NavigationItem[];
     }
     throw error;
   }
@@ -28,13 +75,9 @@ export default async function Header() {
       <div className="container">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center space-x-2">
-            <img 
-              src="https://imgix.cosmicjs.com/your-logo-url?w=120&h=40&fit=crop&auto=format,compress" 
-              alt="Hello Love Co." 
-              width="120" 
-              height="40"
-              className="h-10 w-auto"
-            />
+            <div className="text-2xl font-bold text-accent-orange">
+              💕 Hello Love Co.
+            </div>
           </Link>
           
           <nav className="hidden md:flex items-center space-x-8">
@@ -66,6 +109,13 @@ export default async function Header() {
             >
               Get Started
             </Link>
+            
+            {/* Mobile menu button - you can implement mobile menu later */}
+            <button className="md:hidden p-2 text-foreground hover:text-accent-orange">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
           </div>
         </div>
       </div>
