@@ -5,8 +5,13 @@ interface FAQPreviewProps {
   faqs: FAQ[];
 }
 
+interface DefaultFAQ {
+  question: string;
+  answer: string;
+}
+
 export default function FAQPreview({ faqs }: FAQPreviewProps) {
-  const defaultFAQs = [
+  const defaultFAQs: DefaultFAQ[] = [
     {
       question: "Is this course for couples only?",
       answer: "While designed for couples, individuals can absolutely take the course too. Many people use it to better understand their own relationship patterns and prepare for future partnerships."
@@ -21,7 +26,8 @@ export default function FAQPreview({ faqs }: FAQPreviewProps) {
     }
   ];
 
-  const displayFAQs = faqs.length > 0 ? faqs.slice(0, 3) : defaultFAQs;
+  // Create a unified display array
+  const displayFAQs: (FAQ | DefaultFAQ)[] = faqs.length > 0 ? faqs.slice(0, 3) : defaultFAQs;
 
   return (
     <section className="py-20 bg-muted">
@@ -40,8 +46,17 @@ export default function FAQPreview({ faqs }: FAQPreviewProps) {
             {displayFAQs.map((faq, index) => {
               // Type guard to check if this is a Cosmic FAQ object or default FAQ
               const isCosmicFAQ = 'metadata' in faq && faq.metadata;
-              const question = isCosmicFAQ ? faq.metadata?.question : faq.question;
-              const answer = isCosmicFAQ ? faq.metadata?.answer : faq.answer;
+              
+              let question: string;
+              let answer: string;
+
+              if (isCosmicFAQ) {
+                question = faq.metadata?.question || '';
+                answer = faq.metadata?.answer || '';
+              } else {
+                question = (faq as DefaultFAQ).question;
+                answer = (faq as DefaultFAQ).answer;
+              }
 
               return (
                 <div key={index} className="bg-white rounded-xl p-6 border border-border shadow-sm">
