@@ -1,3 +1,4 @@
+// components/Hero.tsx
 import Link from 'next/link';
 import type { Product } from '@/types';
 
@@ -7,13 +8,19 @@ interface HeroProps {
 
 export default function Hero({ product }: HeroProps) {
   return (
-    <section className="bg-gradient-to-br from-primary/50 to-muted py-20">
-      <div className="container">
+    <section className="bg-gradient-to-br from-primary/50 to-muted py-20 relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-r from-accent-orange/5 to-accent-green/5"></div>
+      <div className="container relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
+            <div className="mb-4">
+              <span className="inline-block bg-accent-orange/10 text-accent-orange px-4 py-2 rounded-full text-sm font-semibold">
+                ✨ Transform Your Relationship in 5 Days
+              </span>
+            </div>
             <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
               Transform Your{' '}
-              <span className="text-gradient">
+              <span className="bg-gradient-to-r from-accent-orange to-accent-green bg-clip-text text-transparent">
                 Intimate Relationship
               </span>{' '}
               in Just 5 Days
@@ -22,12 +29,14 @@ export default function Hero({ product }: HeroProps) {
               Expert-guided lessons, exercises, and proven techniques from certified sex 
               therapists to help you build deeper intimacy and better communication.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row gap-4 mb-8">
               <Link 
                 href={product?.metadata?.buy_now_link || '#course'}
-                className="btn-primary text-center"
+                className="btn-primary text-center group"
               >
+                <span className="mr-2">🚀</span>
                 {product?.metadata?.cta_copy || 'Start Your Journey'}
+                <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
               </Link>
               <Link 
                 href="#learn-more"
@@ -36,18 +45,18 @@ export default function Hero({ product }: HeroProps) {
                 Learn More
               </Link>
             </div>
-            <div className="mt-8 flex items-center space-x-6 text-sm text-muted-foreground">
-              <div className="flex items-center">
-                <span className="text-accent-orange mr-2">✓</span>
-                Expert-designed curriculum
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+              <div className="flex items-center space-x-2">
+                <span className="text-accent-orange text-lg">✓</span>
+                <span className="text-muted-foreground">Expert-designed curriculum</span>
               </div>
-              <div className="flex items-center">
-                <span className="text-accent-orange mr-2">✓</span>
-                Privacy-focused approach
+              <div className="flex items-center space-x-2">
+                <span className="text-accent-orange text-lg">✓</span>
+                <span className="text-muted-foreground">Privacy-focused approach</span>
               </div>
-              <div className="flex items-center">
-                <span className="text-accent-orange mr-2">✓</span>
-                Inclusive for all couples
+              <div className="flex items-center space-x-2">
+                <span className="text-accent-orange text-lg">✓</span>
+                <span className="text-muted-foreground">Inclusive for all couples</span>
               </div>
             </div>
           </div>
@@ -55,14 +64,14 @@ export default function Hero({ product }: HeroProps) {
           <div className="relative">
             {product?.metadata?.featured_image ? (
               <img 
-                src={`${product.metadata.featured_image.imgix_url}?w=600&h=600&fit=crop&auto=format,compress`}
+                src={`${product.metadata.featured_image.imgix_url}?w=1200&h=800&fit=crop&auto=format,compress`}
                 alt={product.metadata?.name || 'Course Image'}
                 width="600"
-                height="600"
-                className="rounded-2xl shadow-2xl"
+                height="400"
+                className="rounded-2xl shadow-2xl w-full"
               />
             ) : (
-              <div className="w-full h-96 bg-gradient-to-br from-accent-orange/20 to-accent-green/20 rounded-2xl flex items-center justify-center">
+              <div className="w-full h-96 bg-gradient-to-br from-accent-orange/20 to-accent-green/20 rounded-2xl flex items-center justify-center shadow-2xl">
                 <div className="text-center p-8">
                   <div className="text-6xl mb-4">💕</div>
                   <h3 className="text-xl font-semibold text-foreground">
@@ -76,11 +85,18 @@ export default function Hero({ product }: HeroProps) {
             )}
             
             <div className="absolute -bottom-6 -right-6 bg-white rounded-lg shadow-lg p-4 border border-border">
-              <div className="flex items-center space-x-2">
-                <div className="flex text-accent-orange">
+              <div className="text-center">
+                <div className="flex items-center justify-center space-x-1 text-accent-orange mb-1">
                   ⭐⭐⭐⭐⭐
                 </div>
-                <span className="text-sm font-medium">4.9/5 from 2,000+ couples</span>
+                <div className="text-sm font-medium text-foreground">4.9/5 from 2,000+ couples</div>
+              </div>
+            </div>
+
+            <div className="absolute -top-6 -left-6 bg-accent-green text-white rounded-lg shadow-lg p-3">
+              <div className="text-center">
+                <div className="font-bold text-lg">$97</div>
+                <div className="text-xs opacity-90">One-time payment</div>
               </div>
             </div>
           </div>
