@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { cosmic, hasStatus } from '@/lib/cosmic';
+import { cosmic, hasStatus, getSiteSettings } from '@/lib/cosmic';
 import type { NavigationItem } from '@/types';
 
 async function getNavigation(): Promise<NavigationItem[]> {
@@ -68,16 +68,32 @@ async function getNavigation(): Promise<NavigationItem[]> {
 }
 
 export default async function Header() {
-  const navigation = await getNavigation();
+  const [navigation, siteSettings] = await Promise.all([
+    getNavigation(),
+    getSiteSettings(),
+  ]);
+
+  const siteName = siteSettings?.metadata?.site_name || 'Hello Love Co.';
+  const logo = siteSettings?.metadata?.logo;
 
   return (
     <header className="bg-white border-b border-border sticky top-0 z-50">
       <div className="container">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center space-x-2">
-            <div className="text-2xl font-bold text-accent-orange">
-              💕 Hello Love Co.
-            </div>
+            {logo?.imgix_url ? (
+              <img 
+                src={`${logo.imgix_url}?w=240&h=60&fit=max&auto=format,compress`}
+                alt={siteName}
+                width="120"
+                height="30"
+                className="h-8 w-auto"
+              />
+            ) : (
+              <div className="text-2xl font-bold text-accent-orange">
+                💕 {siteName}
+              </div>
+            )}
           </Link>
           
           <nav className="hidden md:flex items-center space-x-8">

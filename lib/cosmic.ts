@@ -1,4 +1,5 @@
 import { createBucketClient } from '@cosmicjs/sdk';
+import type { SiteSettings } from '@/types';
 
 export const cosmic = createBucketClient({
   bucketSlug: process.env.COSMIC_BUCKET_SLUG as string,
@@ -8,8 +9,22 @@ export const cosmic = createBucketClient({
 });
 
 // Helper function for error handling
-function hasStatus(error: unknown): error is { status: number } {
+export function hasStatus(error: unknown): error is { status: number } {
   return typeof error === 'object' && error !== null && 'status' in error;
 }
 
-export { hasStatus };
+// Get site settings function
+export async function getSiteSettings(): Promise<SiteSettings | null> {
+  try {
+    const response = await cosmic.objects
+      .findOne({ type: 'site-settings' })
+      .props(['id', 'title', 'slug', 'metadata'])
+      .depth(1);
+    return response.object as SiteSettings;
+  } catch (error) {
+    if (hasStatus(error) && error.status === 404) {
+      return null;
+    }
+    throw error;
+  }
+}

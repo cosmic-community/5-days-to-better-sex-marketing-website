@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { cosmic, hasStatus } from '@/lib/cosmic';
+import { cosmic, hasStatus, getSiteSettings } from '@/lib/cosmic';
 import type { NavigationItem } from '@/types';
 
 async function getFooterNavigation(): Promise<NavigationItem[]> {
@@ -39,10 +39,15 @@ async function getLegalNavigation(): Promise<NavigationItem[]> {
 }
 
 export default async function Footer() {
-  const [footerNav, legalNav] = await Promise.all([
+  const [footerNav, legalNav, siteSettings] = await Promise.all([
     getFooterNavigation(),
     getLegalNavigation(),
+    getSiteSettings(),
   ]);
+
+  const siteName = siteSettings?.metadata?.site_name || 'Hello Love Co.';
+  const logo = siteSettings?.metadata?.logo;
+  const copyrightText = siteSettings?.metadata?.footer_copyright || `© ${new Date().getFullYear()} ${siteName}. All rights reserved.`;
 
   return (
     <footer className="bg-accent-dark text-white">
@@ -50,13 +55,19 @@ export default async function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-2">
             <Link href="/" className="flex items-center space-x-2 mb-4">
-              <img 
-                src="https://imgix.cosmicjs.com/your-logo-url?w=120&h=40&fit=crop&auto=format,compress" 
-                alt="Hello Love Co." 
-                width="120" 
-                height="40"
-                className="h-10 w-auto"
-              />
+              {logo?.imgix_url ? (
+                <img 
+                  src={`${logo.imgix_url}?w=240&h=80&fit=max&auto=format,compress`}
+                  alt={siteName}
+                  width="120"
+                  height="40"
+                  className="h-10 w-auto"
+                />
+              ) : (
+                <div className="text-2xl font-bold text-white">
+                  💕 {siteName}
+                </div>
+              )}
             </Link>
             <p className="text-gray-300 max-w-md">
               Transform your intimate relationship in just 5 days with expert-guided lessons, 
@@ -103,7 +114,7 @@ export default async function Footer() {
         
         <div className="border-t border-gray-700 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-300 text-sm">
-            © {new Date().getFullYear()} Hello Love Co. All rights reserved.
+            {copyrightText}
           </p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             {legalNav.map((item) => (
