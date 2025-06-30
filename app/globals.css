@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --primary: 30 37% 81%; /* #ece0c4 */
+    --accent-orange: 38 100% 52%; /* #ffac0a */
+    --accent-green: 95 31% 44%; /* #689451 */
+    --accent-purple: 316 100% 11%; /* #370031 */
+    --accent-dark: 255 100% 6%; /* #0e001f */
+    --background: 0 0% 100%;
+    --foreground: 255 100% 6%;
+    --muted: 30 37% 95%;
+    --muted-foreground: 30 10% 40%;
+    --border: 30 37% 90%;
+    --ring: 30 37% 81%;
+  }
+}
+
+@layer components {
+  .container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .btn-primary {
+    @apply bg-accent-orange text-white px-6 py-3 rounded-lg font-semibold transition-all duration-200 hover:bg-accent-orange/90 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-accent-orange/50;
+  }
+  
+  .btn-secondary {
+    @apply bg-primary text-accent-dark px-6 py-3 rounded-lg font-semibold transition-all duration-200 hover:bg-primary/90 border border-accent-dark/20;
+  }
+  
+  .text-gradient {
+    @apply bg-gradient-to-r from-accent-orange to-accent-green bg-clip-text text-transparent;
+  }
+}
