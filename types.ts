@@ -195,12 +195,15 @@ function isPage(obj: CosmicObject): obj is Page {
 // Utility types with proper constraints
 type OptionalMetadata<T extends CosmicObject> = Partial<T['metadata']>;
 
-// Helper function to safely access metadata
+// Helper function to safely access metadata with proper type constraints
 function getMetadataProperty<T extends CosmicObject, K extends keyof T['metadata']>(
   obj: T,
   key: K
-): T['metadata'][K] {
-  return obj.metadata[key];
+): T['metadata'][K] | undefined {
+  if (obj.metadata && typeof obj.metadata === 'object') {
+    return obj.metadata[key as string];
+  }
+  return undefined;
 }
 
 export type {
