@@ -10,6 +10,32 @@ interface CosmicObject {
   modified_at: string;
 }
 
+// Site Settings interface
+interface SiteSettings extends CosmicObject {
+  type_slug: 'site-settings';
+  metadata: {
+    site_name?: string;
+    logo?: {
+      url: string;
+      imgix_url: string;
+    };
+    footer_copyright?: string;
+    tagline?: string;
+    description?: string;
+    primary_color?: string;
+    secondary_color?: string;
+    accent_color?: string;
+    contact_email?: string;
+    contact_phone?: string;
+    social_links?: {
+      instagram?: string;
+      twitter?: string;
+      facebook?: string;
+      linkedin?: string;
+    };
+  };
+}
+
 // Product interface (singleton)
 interface Product extends CosmicObject {
   type_slug: 'product';
@@ -192,6 +218,10 @@ function isPage(obj: CosmicObject): obj is Page {
   return obj.type_slug === 'pages';
 }
 
+function isSiteSettings(obj: CosmicObject): obj is SiteSettings {
+  return obj.type_slug === 'site-settings';
+}
+
 // Utility types with proper constraints
 type OptionalMetadata<T extends CosmicObject> = Partial<T['metadata']>;
 
@@ -208,6 +238,7 @@ function getMetadataProperty<T extends CosmicObject, K extends keyof T['metadata
 
 export type {
   CosmicObject,
+  SiteSettings,
   Product,
   CTABlock,
   Page,
@@ -226,5 +257,6 @@ export {
   isBlogPost,
   isTestimonial,
   isPage,
+  isSiteSettings,
   getMetadataProperty
 };

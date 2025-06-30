@@ -78,7 +78,7 @@ export default async function Footer() {
           <div>
             <h3 className="font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2">
-              {footerNav.map((item) => (
+              {footerNav.map((item: NavigationItem) => (
                 <li key={item.id}>
                   <Link
                     href={item.metadata?.url || '#'}
@@ -117,7 +117,7 @@ export default async function Footer() {
             {copyrightText}
           </p>
           <div className="flex space-x-6 mt-4 md:mt-0">
-            {legalNav.map((item) => (
+            {legalNav.map((item: NavigationItem) => (
               <Link
                 key={item.id}
                 href={item.metadata?.url || '#'}

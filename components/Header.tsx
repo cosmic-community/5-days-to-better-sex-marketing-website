@@ -97,7 +97,7 @@ export default async function Header() {
           </Link>
           
           <nav className="hidden md:flex items-center space-x-8">
-            {navigation.map((item) => (
+            {navigation.map((item: NavigationItem) => (
               <Link
                 key={item.id}
                 href={item.metadata?.url || '#'}
