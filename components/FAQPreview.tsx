@@ -1,4 +1,3 @@
-// components/FAQPreview.tsx
 import Link from 'next/link';
 import type { FAQ } from '@/types';
 
@@ -38,20 +37,27 @@ export default function FAQPreview({ faqs }: FAQPreviewProps) {
           </div>
 
           <div className="space-y-6 mb-12">
-            {displayFAQs.map((faq, index) => (
-              <div key={index} className="bg-white rounded-xl p-6 border border-border shadow-sm">
-                <h3 className="text-xl font-bold text-foreground mb-4">
-                  {faqs.length > 0 ? faq.metadata?.question : faq.question}
-                </h3>
-                <div className="text-muted-foreground leading-relaxed">
-                  {faqs.length > 0 ? (
-                    <div dangerouslySetInnerHTML={{ __html: faq.metadata?.answer || '' }} />
-                  ) : (
-                    <p>{faq.answer}</p>
-                  )}
+            {displayFAQs.map((faq, index) => {
+              // Type guard to check if this is a Cosmic FAQ object or default FAQ
+              const isCosmicFAQ = 'metadata' in faq && faq.metadata;
+              const question = isCosmicFAQ ? faq.metadata?.question : faq.question;
+              const answer = isCosmicFAQ ? faq.metadata?.answer : faq.answer;
+
+              return (
+                <div key={index} className="bg-white rounded-xl p-6 border border-border shadow-sm">
+                  <h3 className="text-xl font-bold text-foreground mb-4">
+                    {question}
+                  </h3>
+                  <div className="text-muted-foreground leading-relaxed">
+                    {isCosmicFAQ && answer ? (
+                      <div dangerouslySetInnerHTML={{ __html: answer }} />
+                    ) : (
+                      <p>{answer}</p>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           <div className="text-center">
