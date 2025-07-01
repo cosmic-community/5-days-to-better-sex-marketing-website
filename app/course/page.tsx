@@ -184,7 +184,12 @@ export default async function CoursePage() {
     type_slug: 'homepage-content',
     created_at: new Date().toISOString(),
     modified_at: new Date().toISOString(),
-    metadata: {}
+    metadata: {
+      roadmap_section: {
+        heading: "Your 5-Day Journey",
+        subheading: "A structured path to transformation"
+      }
+    }
   };
 
   const testimonialsContent: HomepageContent = {
@@ -194,7 +199,12 @@ export default async function CoursePage() {
     type_slug: 'homepage-content',
     created_at: new Date().toISOString(),
     modified_at: new Date().toISOString(),
-    metadata: {}
+    metadata: {
+      testimonials_section: {
+        heading: "What Couples Are Saying",
+        subheading: "Real results from real relationships"
+      }
+    }
   };
 
   const faqContent: HomepageContent = {
@@ -204,10 +214,23 @@ export default async function CoursePage() {
     type_slug: 'homepage-content',
     created_at: new Date().toISOString(),
     modified_at: new Date().toISOString(),
-    metadata: {}
+    metadata: {
+      faq_section: {
+        heading: "Frequently Asked Questions",
+        subheading: "Everything you need to know",
+        more_questions: {
+          heading: "Still have questions?",
+          description: "We're here to help you succeed",
+          view_all_text: "View all FAQs",
+          ask_question_text: "Ask a question",
+          contact_email: "support@hilove.com"
+        },
+        default_faqs: []
+      }
+    }
   };
 
-  // Convert CTABlock to HomepageContent if it exists
+  // Convert CTABlock to HomepageContent with proper structure
   const ctaContent: HomepageContent | null = ctaBlock ? {
     id: ctaBlock.id,
     slug: ctaBlock.slug,
@@ -215,7 +238,27 @@ export default async function CoursePage() {
     type_slug: 'homepage-content',
     created_at: ctaBlock.created_at,
     modified_at: ctaBlock.modified_at,
-    metadata: ctaBlock.metadata
+    metadata: {
+      cta_section: {
+        heading: ctaBlock.metadata.heading || "Ready to Transform Your Relationship?",
+        subheading: ctaBlock.metadata.subheading || "Join thousands of couples who have already started their journey",
+        stats: [
+          { number: "10,000+", label: "Happy Couples" },
+          { number: "5", label: "Days to Change" },
+          { number: "98%", label: "Success Rate" }
+        ],
+        primary_button: {
+          text: ctaBlock.metadata.button_text || "Get Started Now",
+          link: ctaBlock.metadata.button_url || "#"
+        },
+        secondary_button: {
+          text: "Learn More",
+          link: "/about"
+        },
+        guarantee_text: "30-day money-back guarantee",
+        security_text: "Secure checkout with SSL encryption"
+      }
+    }
   } : null;
 
   return (
