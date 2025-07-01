@@ -29,6 +29,9 @@ interface CoursePage {
   id: string;
   slug: string;
   title: string;
+  type_slug: string;
+  created_at: string;
+  modified_at: string;
   metadata: PageMetadata;
 }
 
@@ -36,6 +39,9 @@ interface Product {
   id: string;
   slug: string;
   title: string;
+  type_slug: string;
+  created_at: string;
+  modified_at: string;
   metadata: {
     name: string;
     description: string;
@@ -58,6 +64,9 @@ interface RoadmapDay {
   id: string;
   slug: string;
   title: string;
+  type_slug: string;
+  created_at: string;
+  modified_at: string;
   metadata: {
     day_number: number;
     title: string;
@@ -75,6 +84,9 @@ interface Testimonial {
   id: string;
   slug: string;
   title: string;
+  type_slug: string;
+  created_at: string;
+  modified_at: string;
   metadata: {
     quote: string;
     name: string;
@@ -92,6 +104,9 @@ interface FAQ {
   id: string;
   slug: string;
   title: string;
+  type_slug: string;
+  created_at: string;
+  modified_at: string;
   metadata: {
     question: string;
     answer: string;
@@ -108,6 +123,9 @@ interface CTABlock {
   id: string;
   slug: string;
   title: string;
+  type_slug: string;
+  created_at: string;
+  modified_at: string;
   metadata: {
     heading: string;
     subheading: string;
@@ -120,6 +138,13 @@ interface CTABlock {
     background_color: string;
     name: string;
   };
+}
+
+interface HomepageContent {
+  type_slug: string;
+  created_at: string;
+  modified_at: string;
+  title: string;
 }
 
 async function getCoursePage(): Promise<CoursePage | null> {
@@ -314,20 +339,26 @@ export default async function CoursePage() {
       {/* Visual Roadmap */}
       <VisualRoadmap days={roadmapDays} content={{
         title: "Your 5-Day Journey",
-        subtitle: "Each day builds on the last, creating a comprehensive transformation"
-      }} />
+        type_slug: 'homepage-content',
+        created_at: '',
+        modified_at: ''
+      } as HomepageContent} />
 
       {/* Testimonials */}
       <TestimonialsSection testimonials={testimonials} content={{
         title: "What Couples Are Saying",
-        subtitle: "Real results from real relationships"
-      }} />
+        type_slug: 'homepage-content',
+        created_at: '',
+        modified_at: ''
+      } as HomepageContent} />
 
       {/* FAQ Preview */}
       <FAQPreview faqs={faqs} content={{
         title: "Frequently Asked Questions",
-        subtitle: "Everything you need to know before starting your journey"
-      }} />
+        type_slug: 'homepage-content',
+        created_at: '',
+        modified_at: ''
+      } as HomepageContent} />
 
       {/* Final CTA */}
       {ctaBlock && <CTASection content={ctaBlock} />}
