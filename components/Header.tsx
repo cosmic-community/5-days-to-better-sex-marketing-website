@@ -1,3 +1,4 @@
+// components/Header.tsx
 'use client';
 
 import Link from 'next/link';
@@ -82,7 +83,7 @@ function HeaderClient({ navigation, siteSettings }: HeaderProps) {
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
-      setIsScrolled(scrollTop > 75); // Trigger transition after 75px of scrolling
+      setIsScrolled(scrollTop > 50); // Trigger transition after 50px of scrolling
     };
 
     // Add scroll event listener
@@ -101,9 +102,9 @@ function HeaderClient({ navigation, siteSettings }: HeaderProps) {
   return (
     <header 
       className={`
-        sticky top-0 z-50 transition-all duration-300 ease-in-out
+        sticky top-0 z-50 transition-all duration-500 ease-in-out
         ${isScrolled 
-          ? 'bg-white backdrop-blur-md border-b border-gray-200 shadow-lg' 
+          ? 'bg-white shadow-lg backdrop-blur-sm border-b border-gray-100' 
           : 'bg-gradient-to-br from-primary/50 to-muted border-b border-primary/20'
         }
       `}
@@ -122,10 +123,10 @@ function HeaderClient({ navigation, siteSettings }: HeaderProps) {
                 alt={siteName}
                 width="120"
                 height="30"
-                className="h-8 w-auto transition-all duration-300"
+                className="h-8 w-auto transition-all duration-500"
               />
             ) : (
-              <div className={`text-2xl font-bold transition-colors duration-300 ${
+              <div className={`text-2xl font-bold transition-colors duration-500 ${
                 isScrolled ? 'text-gray-900' : 'text-foreground'
               }`}>
                 💕 {siteName}
@@ -138,9 +139,9 @@ function HeaderClient({ navigation, siteSettings }: HeaderProps) {
               <Link
                 key={item.id}
                 href={item.metadata?.url || '#'}
-                className={`font-medium transition-colors duration-300 ${
+                className={`font-medium transition-all duration-500 hover:scale-105 ${
                   isScrolled 
-                    ? 'text-gray-800 hover:text-accent-orange' 
+                    ? 'text-gray-700 hover:text-accent-orange' 
                     : 'text-foreground hover:text-accent-orange'
                 }`}
                 {...(item.metadata?.link_type === 'external' && {
@@ -153,9 +154,9 @@ function HeaderClient({ navigation, siteSettings }: HeaderProps) {
             ))}
             <Link 
               href="/blog" 
-              className={`font-medium transition-colors duration-300 ${
+              className={`font-medium transition-all duration-500 hover:scale-105 ${
                 isScrolled 
-                  ? 'text-gray-800 hover:text-accent-orange' 
+                  ? 'text-gray-700 hover:text-accent-orange' 
                   : 'text-foreground hover:text-accent-orange'
               }`}
             >
@@ -166,15 +167,19 @@ function HeaderClient({ navigation, siteSettings }: HeaderProps) {
           <div className="flex items-center space-x-4">
             <Link 
               href="#course"
-              className="px-6 py-3 rounded-lg font-semibold bg-accent-orange text-white hover:bg-accent-orange/90 transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-accent-orange/50"
+              className={`px-6 py-3 rounded-lg font-semibold transition-all duration-500 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-accent-orange/50 ${
+                isScrolled
+                  ? 'bg-accent-orange text-white hover:bg-accent-orange/90 shadow-md'
+                  : 'bg-accent-orange text-white hover:bg-accent-orange/90'
+              }`}
             >
               Get Started
             </Link>
             
             {/* Mobile menu button */}
-            <button className={`md:hidden p-2 transition-colors duration-300 ${
+            <button className={`md:hidden p-2 transition-all duration-500 ${
               isScrolled 
-                ? 'text-gray-800 hover:text-accent-orange' 
+                ? 'text-gray-700 hover:text-accent-orange' 
                 : 'text-foreground hover:text-accent-orange'
             }`}>
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
