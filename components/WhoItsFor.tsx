@@ -1,6 +1,13 @@
-// components/WhoItsFor.tsx
-export default function WhoItsFor() {
-  const audiences = [
+import type { HomepageContent } from '@/types';
+
+interface WhoItsForProps {
+  content: HomepageContent | null;
+}
+
+export default function WhoItsFor({ content }: WhoItsForProps) {
+  const whoItsForContent = content?.metadata?.who_its_for;
+  
+  const defaultAudiences = [
     {
       icon: "💑",
       title: "Long-term Couples",
@@ -33,19 +40,21 @@ export default function WhoItsFor() {
     }
   ];
 
+  const audiences = whoItsForContent?.audiences || defaultAudiences;
+
   return (
     <section className="py-20 bg-white">
       <div className="container">
         <div className="max-w-3xl mx-auto text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
-            Who This Course Is For
+            {whoItsForContent?.heading || "Who This Course Is For"}
           </h2>
           <p className="text-lg text-muted-foreground mb-8">
-            No matter your age, gender, or history — this work meets you where you are.
+            {whoItsForContent?.subheading || "No matter your age, gender, or history — this work meets you where you are."}
           </p>
           <div className="bg-gradient-to-r from-accent-orange/10 to-accent-green/10 rounded-lg p-6">
             <p className="text-foreground font-medium">
-              Our approach is inclusive, judgment-free, and designed for real people with real lives.
+              {whoItsForContent?.description || "Our approach is inclusive, judgment-free, and designed for real people with real lives."}
             </p>
           </div>
         </div>
@@ -69,12 +78,10 @@ export default function WhoItsFor() {
         <div className="mt-16 text-center">
           <div className="bg-gradient-to-r from-accent-green/10 to-accent-orange/10 rounded-xl p-8 max-w-4xl mx-auto">
             <h3 className="text-2xl font-bold text-foreground mb-4">
-              Not Sure If This Is Right for You?
+              {whoItsForContent?.not_sure_section?.heading || "Not Sure If This Is Right for You?"}
             </h3>
             <p className="text-muted-foreground text-lg leading-relaxed">
-              This course is designed for committed couples ready to invest in their relationship. 
-              If you're dealing with serious relationship issues, consider couples therapy first. 
-              This program works best when both partners are committed to growth.
+              {whoItsForContent?.not_sure_section?.description || "This course is designed for committed couples ready to invest in their relationship. If you're dealing with serious relationship issues, consider couples therapy first. This program works best when both partners are committed to growth."}
             </p>
           </div>
         </div>

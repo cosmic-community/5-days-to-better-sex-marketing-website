@@ -1,6 +1,5 @@
-// app/page.tsx
-import { cosmic, hasStatus } from '@/lib/cosmic';
-import type { Product, BlogPost, Testimonial, RoadmapDay, Author, FAQ } from '@/types';
+import { cosmic, hasStatus, getHomepageContent } from '@/lib/cosmic';
+import type { Product, BlogPost, Testimonial, RoadmapDay, Author, FAQ, HomepageContent } from '@/types';
 import Hero from '@/components/Hero';
 import MeetJustine from '@/components/MeetJustine';
 import ProductShowcase from '@/components/ProductShowcase';
@@ -111,18 +110,19 @@ async function getFAQs(): Promise<FAQ[]> {
 }
 
 export default async function HomePage() {
-  const [product, justine, blogPosts, testimonials, roadmapDays, faqs] = await Promise.all([
+  const [product, justine, blogPosts, testimonials, roadmapDays, faqs, homepageContent] = await Promise.all([
     getProduct(),
     getJustine(),
     getBlogPosts(),
     getTestimonials(),
     getRoadmapDays(),
     getFAQs(),
+    getHomepageContent(),
   ]);
 
   return (
     <div className="min-h-screen">
-      <Hero product={product} />
+      <Hero product={product} content={homepageContent} />
       
       {justine && (
         <MeetJustine author={justine} />
@@ -132,29 +132,29 @@ export default async function HomePage() {
         <ProductShowcase product={product} />
       )}
 
-      <WhoItsFor />
+      <WhoItsFor content={homepageContent} />
       
       {roadmapDays.length > 0 && (
-        <VisualRoadmap days={roadmapDays} />
+        <VisualRoadmap days={roadmapDays} content={homepageContent} />
       )}
 
       <CoursePreview />
       
       {testimonials.length > 0 && (
-        <TestimonialsSection testimonials={testimonials} />
+        <TestimonialsSection testimonials={testimonials} content={homepageContent} />
       )}
 
-      <GuaranteeSection />
+      <GuaranteeSection content={homepageContent} />
 
       {faqs.length > 0 && (
-        <FAQPreview faqs={faqs} />
+        <FAQPreview faqs={faqs} content={homepageContent} />
       )}
       
       {blogPosts.length > 0 && (
         <BlogPreview posts={blogPosts} />
       )}
       
-      <CTASection />
+      <CTASection content={homepageContent} />
     </div>
   );
 }

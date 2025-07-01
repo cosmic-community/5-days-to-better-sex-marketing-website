@@ -1,5 +1,5 @@
 import { createBucketClient } from '@cosmicjs/sdk';
-import type { SiteSettings } from '@/types';
+import type { SiteSettings, HomepageContent } from '@/types';
 
 export const cosmic = createBucketClient({
   bucketSlug: process.env.COSMIC_BUCKET_SLUG as string,
@@ -21,6 +21,22 @@ export async function getSiteSettings(): Promise<SiteSettings | null> {
       .props(['id', 'title', 'slug', 'metadata'])
       .depth(1);
     return response.object as SiteSettings;
+  } catch (error) {
+    if (hasStatus(error) && error.status === 404) {
+      return null;
+    }
+    throw error;
+  }
+}
+
+// Get homepage content function
+export async function getHomepageContent(): Promise<HomepageContent | null> {
+  try {
+    const response = await cosmic.objects
+      .findOne({ type: 'homepage-content' })
+      .props(['id', 'title', 'slug', 'metadata'])
+      .depth(1);
+    return response.object as HomepageContent;
   } catch (error) {
     if (hasStatus(error) && error.status === 404) {
       return null;

@@ -1,8 +1,9 @@
 import Link from 'next/link';
-import type { FAQ } from '@/types';
+import type { FAQ, HomepageContent } from '@/types';
 
 interface FAQPreviewProps {
   faqs: FAQ[];
+  content: HomepageContent | null;
 }
 
 interface DefaultFAQ {
@@ -10,8 +11,10 @@ interface DefaultFAQ {
   answer: string;
 }
 
-export default function FAQPreview({ faqs }: FAQPreviewProps) {
-  const defaultFAQs: DefaultFAQ[] = [
+export default function FAQPreview({ faqs, content }: FAQPreviewProps) {
+  const faqContent = content?.metadata?.faq_section;
+  
+  const defaultFAQs: DefaultFAQ[] = faqContent?.default_faqs || [
     {
       question: "Is this course for couples only?",
       answer: "While designed for couples, individuals can absolutely take the course too. Many people use it to better understand their own relationship patterns and prepare for future partnerships."
@@ -35,10 +38,10 @@ export default function FAQPreview({ faqs }: FAQPreviewProps) {
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
-              Common Questions
+              {faqContent?.heading || "Common Questions"}
             </h2>
             <p className="text-lg text-muted-foreground">
-              Here are the most frequently asked questions about our course
+              {faqContent?.subheading || "Here are the most frequently asked questions about our course"}
             </p>
           </div>
 
@@ -78,17 +81,17 @@ export default function FAQPreview({ faqs }: FAQPreviewProps) {
           <div className="text-center">
             <div className="bg-gradient-to-r from-accent-orange/10 to-accent-green/10 rounded-xl p-8">
               <h3 className="text-xl font-bold text-foreground mb-4">
-                Have More Questions?
+                {faqContent?.more_questions?.heading || "Have More Questions?"}
               </h3>
               <p className="text-muted-foreground mb-6">
-                We've compiled answers to dozens of questions about the course, pricing, and what to expect.
+                {faqContent?.more_questions?.description || "We've compiled answers to dozens of questions about the course, pricing, and what to expect."}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/faq" className="btn-primary">
-                  View All FAQs
+                  {faqContent?.more_questions?.view_all_text || "View All FAQs"}
                 </Link>
-                <a href="mailto:hello@hilove.co" className="btn-secondary">
-                  Ask a Question
+                <a href={`mailto:${faqContent?.more_questions?.contact_email || 'hello@hilove.co'}`} className="btn-secondary">
+                  {faqContent?.more_questions?.ask_question_text || "Ask a Question"}
                 </a>
               </div>
             </div>

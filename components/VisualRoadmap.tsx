@@ -1,21 +1,23 @@
-import type { RoadmapDay } from '@/types';
+import type { RoadmapDay, HomepageContent } from '@/types';
 
 interface VisualRoadmapProps {
   days: RoadmapDay[];
+  content: HomepageContent | null;
 }
 
-export default function VisualRoadmap({ days }: VisualRoadmapProps) {
+export default function VisualRoadmap({ days, content }: VisualRoadmapProps) {
   const sortedDays = days.sort((a, b) => (a.metadata?.day_number || 0) - (b.metadata?.day_number || 0));
+  const roadmapContent = content?.metadata?.roadmap_section;
 
   return (
     <section className="py-20 bg-muted">
       <div className="container">
         <div className="max-w-3xl mx-auto text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
-            Your 5-Day Journey
+            {roadmapContent?.heading || "Your 5-Day Journey"}
           </h2>
           <p className="text-lg text-muted-foreground">
-            Each day builds on the last, creating lasting change in your relationship
+            {roadmapContent?.subheading || "Each day builds on the last, creating lasting change in your relationship"}
           </p>
         </div>
 

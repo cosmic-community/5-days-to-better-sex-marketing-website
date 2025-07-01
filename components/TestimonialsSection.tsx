@@ -1,23 +1,26 @@
-import type { Testimonial } from '@/types';
+import type { Testimonial, HomepageContent } from '@/types';
 
 interface TestimonialsSectionProps {
   testimonials: Testimonial[];
+  content: HomepageContent | null;
 }
 
-export default function TestimonialsSection({ testimonials }: TestimonialsSectionProps) {
+export default function TestimonialsSection({ testimonials, content }: TestimonialsSectionProps) {
   if (testimonials.length === 0) {
     return null;
   }
+
+  const testimonialsContent = content?.metadata?.testimonials_section;
 
   return (
     <section className="py-20 bg-white">
       <div className="container">
         <div className="max-w-3xl mx-auto text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
-            Real Stories from Real Couples
+            {testimonialsContent?.heading || "Real Stories from Real Couples"}
           </h2>
           <p className="text-lg text-muted-foreground">
-            See how our program has transformed relationships just like yours
+            {testimonialsContent?.subheading || "See how our program has transformed relationships just like yours"}
           </p>
         </div>
 

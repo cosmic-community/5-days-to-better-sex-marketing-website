@@ -36,6 +36,104 @@ interface SiteSettings extends CosmicObject {
   };
 }
 
+// Homepage Content interface
+interface HomepageContent extends CosmicObject {
+  type_slug: 'homepage-content';
+  metadata: {
+    hero_section?: {
+      badge_text: string;
+      main_heading: string;
+      subheading: string;
+      learn_more_text: string;
+      features: Array<{
+        icon: string;
+        text: string;
+      }>;
+      review_badge: {
+        rating: string;
+        text: string;
+      };
+    };
+    who_its_for?: {
+      heading: string;
+      subheading: string;
+      description: string;
+      audiences: Array<{
+        icon: string;
+        title: string;
+        description: string;
+      }>;
+      not_sure_section: {
+        heading: string;
+        description: string;
+      };
+    };
+    roadmap_section?: {
+      heading: string;
+      subheading: string;
+    };
+    testimonials_section?: {
+      heading: string;
+      subheading: string;
+    };
+    guarantee_section?: {
+      heading: string;
+      subheading: string;
+      guarantees: Array<{
+        icon: string;
+        title: string;
+        description: string;
+      }>;
+      testimonial_quotes_heading: string;
+      testimonial_quotes: Array<{
+        quote: string;
+        name: string;
+        context: string;
+      }>;
+      ready_section: {
+        heading: string;
+        description: string;
+        button_text: string;
+        contact_text: string;
+        contact_email: string;
+      };
+    };
+    faq_section?: {
+      heading: string;
+      subheading: string;
+      more_questions: {
+        heading: string;
+        description: string;
+        view_all_text: string;
+        ask_question_text: string;
+        contact_email: string;
+      };
+      default_faqs: Array<{
+        question: string;
+        answer: string;
+      }>;
+    };
+    cta_section?: {
+      heading: string;
+      subheading: string;
+      stats: Array<{
+        number: string;
+        label: string;
+      }>;
+      primary_button: {
+        text: string;
+        link: string;
+      };
+      secondary_button: {
+        text: string;
+        link: string;
+      };
+      guarantee_text: string;
+      security_text: string;
+    };
+  };
+}
+
 // Product interface (singleton)
 interface Product extends CosmicObject {
   type_slug: 'product';
@@ -222,6 +320,10 @@ function isSiteSettings(obj: CosmicObject): obj is SiteSettings {
   return obj.type_slug === 'site-settings';
 }
 
+function isHomepageContent(obj: CosmicObject): obj is HomepageContent {
+  return obj.type_slug === 'homepage-content';
+}
+
 // Utility types with proper constraints
 type OptionalMetadata<T extends CosmicObject> = Partial<T['metadata']>;
 
@@ -239,6 +341,7 @@ function getMetadataProperty<T extends CosmicObject, K extends keyof T['metadata
 export type {
   CosmicObject,
   SiteSettings,
+  HomepageContent,
   Product,
   CTABlock,
   Page,
@@ -258,5 +361,6 @@ export {
   isTestimonial,
   isPage,
   isSiteSettings,
+  isHomepageContent,
   getMetadataProperty
 };
