@@ -103,7 +103,7 @@ function HeaderClient({ navigation, siteSettings }: HeaderProps) {
       className={`
         sticky top-0 z-50 transition-all duration-300 ease-in-out
         ${isScrolled 
-          ? 'bg-white/95 backdrop-blur-sm border-b border-gray-200 shadow-sm' 
+          ? 'bg-white backdrop-blur-md border-b border-gray-200 shadow-lg' 
           : 'bg-gradient-to-br from-primary/50 to-muted border-b border-primary/20'
         }
       `}
@@ -140,7 +140,7 @@ function HeaderClient({ navigation, siteSettings }: HeaderProps) {
                 href={item.metadata?.url || '#'}
                 className={`font-medium transition-colors duration-300 ${
                   isScrolled 
-                    ? 'text-gray-700 hover:text-accent-orange' 
+                    ? 'text-gray-800 hover:text-accent-orange' 
                     : 'text-foreground hover:text-accent-orange'
                 }`}
                 {...(item.metadata?.link_type === 'external' && {
@@ -155,7 +155,7 @@ function HeaderClient({ navigation, siteSettings }: HeaderProps) {
               href="/blog" 
               className={`font-medium transition-colors duration-300 ${
                 isScrolled 
-                  ? 'text-gray-700 hover:text-accent-orange' 
+                  ? 'text-gray-800 hover:text-accent-orange' 
                   : 'text-foreground hover:text-accent-orange'
               }`}
             >
@@ -174,7 +174,7 @@ function HeaderClient({ navigation, siteSettings }: HeaderProps) {
             {/* Mobile menu button */}
             <button className={`md:hidden p-2 transition-colors duration-300 ${
               isScrolled 
-                ? 'text-gray-700 hover:text-accent-orange' 
+                ? 'text-gray-800 hover:text-accent-orange' 
                 : 'text-foreground hover:text-accent-orange'
             }`}>
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
