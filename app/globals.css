@@ -5,6 +5,7 @@
 @layer base {
   :root {
     --primary: 30 37% 81%; /* #ece0c4 */
+    --brand-primary: 145 55% 23%; /* #145A32 - Main brand color */
     --accent-orange: 38 100% 52%; /* #ffac0a */
     --accent-green: 95 31% 44%; /* #689451 */
     --accent-purple: 316 100% 11%; /* #370031 */

@@ -1,8 +1,12 @@
+'use client';
+
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
 import { cosmic, hasStatus, getSiteSettings } from '@/lib/cosmic';
 import type { NavigationItem } from '@/types';
 
-async function getNavigation(): Promise<NavigationItem[]> {
+// Move the async data fetching to a separate function
+async function getNavigationData() {
   try {
     const response = await cosmic.objects
       .find({ 
@@ -67,17 +71,43 @@ async function getNavigation(): Promise<NavigationItem[]> {
   }
 }
 
-export default async function Header() {
-  const [navigation, siteSettings] = await Promise.all([
-    getNavigation(),
-    getSiteSettings(),
-  ]);
+interface HeaderProps {
+  navigation: NavigationItem[];
+  siteSettings: any;
+}
+
+function HeaderClient({ navigation, siteSettings }: HeaderProps) {
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      setIsScrolled(scrollTop > 75); // Trigger transition after 75px of scrolling
+    };
+
+    // Add scroll event listener
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    // Check initial scroll position
+    handleScroll();
+
+    // Cleanup
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const siteName = siteSettings?.metadata?.site_name || 'Hello Love Co.';
   const logo = siteSettings?.metadata?.logo;
 
   return (
-    <header className="bg-white border-b border-border sticky top-0 z-50">
+    <header 
+      className={`
+        sticky top-0 z-50 transition-all duration-300 ease-in-out
+        ${isScrolled 
+          ? 'bg-white/95 backdrop-blur-sm border-b border-border shadow-sm' 
+          : 'bg-brand-primary border-b border-brand-primary/20'
+        }
+      `}
+    >
       <div className="container">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center space-x-2">
@@ -87,10 +117,13 @@ export default async function Header() {
                 alt={siteName}
                 width="120"
                 height="30"
-                className="h-8 w-auto"
+                className="h-8 w-auto transition-all duration-300"
               />
             ) : (
-              <div className="text-2xl font-bold text-accent-orange">
+              <div className={`
+                text-2xl font-bold transition-colors duration-300
+                ${isScrolled ? 'text-accent-orange' : 'text-white'}
+              `}>
                 💕 {siteName}
               </div>
             )}
@@ -101,7 +134,13 @@ export default async function Header() {
               <Link
                 key={item.id}
                 href={item.metadata?.url || '#'}
-                className="text-foreground hover:text-accent-orange transition-colors duration-200 font-medium"
+                className={`
+                  font-medium transition-colors duration-300
+                  ${isScrolled 
+                    ? 'text-foreground hover:text-accent-orange' 
+                    : 'text-white/90 hover:text-white'
+                  }
+                `}
                 {...(item.metadata?.link_type === 'external' && {
                   target: '_blank',
                   rel: 'noopener noreferrer'
@@ -112,7 +151,13 @@ export default async function Header() {
             ))}
             <Link 
               href="/blog" 
-              className="text-foreground hover:text-accent-orange transition-colors duration-200 font-medium"
+              className={`
+                font-medium transition-colors duration-300
+                ${isScrolled 
+                  ? 'text-foreground hover:text-accent-orange' 
+                  : 'text-white/90 hover:text-white'
+                }
+              `}
             >
               Blog
             </Link>
@@ -121,13 +166,25 @@ export default async function Header() {
           <div className="flex items-center space-x-4">
             <Link 
               href="#course"
-              className="btn-primary"
+              className={`
+                px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-accent-orange/50
+                ${isScrolled 
+                  ? 'bg-accent-orange text-white hover:bg-accent-orange/90' 
+                  : 'bg-white text-brand-primary hover:bg-white/90'
+                }
+              `}
             >
               Get Started
             </Link>
             
-            {/* Mobile menu button - you can implement mobile menu later */}
-            <button className="md:hidden p-2 text-foreground hover:text-accent-orange">
+            {/* Mobile menu button */}
+            <button className={`
+              md:hidden p-2 transition-colors duration-300
+              ${isScrolled 
+                ? 'text-foreground hover:text-accent-orange' 
+                : 'text-white/90 hover:text-white'
+              }
+            `}>
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
@@ -137,4 +194,13 @@ export default async function Header() {
       </div>
     </header>
   );
+}
+
+export default async function Header() {
+  const [navigation, siteSettings] = await Promise.all([
+    getNavigationData(),
+    getSiteSettings(),
+  ]);
+
+  return <HeaderClient navigation={navigation} siteSettings={siteSettings} />;
 }
