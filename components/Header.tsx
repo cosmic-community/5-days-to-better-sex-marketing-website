@@ -103,12 +103,15 @@ function HeaderClient({ navigation, siteSettings }: HeaderProps) {
       className={`
         sticky top-0 z-50 transition-all duration-300 ease-in-out
         ${isScrolled 
-          ? 'bg-white/95 backdrop-blur-sm border-b border-border shadow-sm' 
-          : 'bg-brand-primary border-b border-brand-primary/20'
+          ? 'bg-gradient-to-br from-primary/95 to-muted/95 backdrop-blur-sm border-b border-border shadow-sm' 
+          : 'bg-gradient-to-br from-primary/50 to-muted border-b border-primary/20'
         }
       `}
     >
-      <div className="container">
+      {/* Gradient overlay for consistency with hero */}
+      <div className="absolute inset-0 bg-gradient-to-r from-accent-orange/5 to-accent-green/5"></div>
+      
+      <div className="container relative z-10">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center space-x-2">
             {logo?.imgix_url ? (
@@ -120,10 +123,7 @@ function HeaderClient({ navigation, siteSettings }: HeaderProps) {
                 className="h-8 w-auto transition-all duration-300"
               />
             ) : (
-              <div className={`
-                text-2xl font-bold transition-colors duration-300
-                ${isScrolled ? 'text-accent-orange' : 'text-white'}
-              `}>
+              <div className="text-2xl font-bold text-foreground transition-colors duration-300">
                 💕 {siteName}
               </div>
             )}
@@ -134,13 +134,7 @@ function HeaderClient({ navigation, siteSettings }: HeaderProps) {
               <Link
                 key={item.id}
                 href={item.metadata?.url || '#'}
-                className={`
-                  font-medium transition-colors duration-300
-                  ${isScrolled 
-                    ? 'text-foreground hover:text-accent-orange' 
-                    : 'text-white/90 hover:text-white'
-                  }
-                `}
+                className="font-medium text-foreground hover:text-accent-orange transition-colors duration-300"
                 {...(item.metadata?.link_type === 'external' && {
                   target: '_blank',
                   rel: 'noopener noreferrer'
@@ -151,13 +145,7 @@ function HeaderClient({ navigation, siteSettings }: HeaderProps) {
             ))}
             <Link 
               href="/blog" 
-              className={`
-                font-medium transition-colors duration-300
-                ${isScrolled 
-                  ? 'text-foreground hover:text-accent-orange' 
-                  : 'text-white/90 hover:text-white'
-                }
-              `}
+              className="font-medium text-foreground hover:text-accent-orange transition-colors duration-300"
             >
               Blog
             </Link>
@@ -166,25 +154,13 @@ function HeaderClient({ navigation, siteSettings }: HeaderProps) {
           <div className="flex items-center space-x-4">
             <Link 
               href="#course"
-              className={`
-                px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-accent-orange/50
-                ${isScrolled 
-                  ? 'bg-accent-orange text-white hover:bg-accent-orange/90' 
-                  : 'bg-white text-brand-primary hover:bg-white/90'
-                }
-              `}
+              className="px-6 py-3 rounded-lg font-semibold bg-accent-orange text-white hover:bg-accent-orange/90 transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-accent-orange/50"
             >
               Get Started
             </Link>
             
             {/* Mobile menu button */}
-            <button className={`
-              md:hidden p-2 transition-colors duration-300
-              ${isScrolled 
-                ? 'text-foreground hover:text-accent-orange' 
-                : 'text-white/90 hover:text-white'
-              }
-            `}>
+            <button className="md:hidden p-2 text-foreground hover:text-accent-orange transition-colors duration-300">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
