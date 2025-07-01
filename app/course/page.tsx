@@ -1,4 +1,3 @@
-// app/course/page.tsx
 import { cosmic, hasStatus } from '@/lib/cosmic';
 import type { Metadata } from 'next';
 import ProductShowcase from '@/components/ProductShowcase';
@@ -33,6 +32,96 @@ interface CoursePage {
   metadata: PageMetadata;
 }
 
+interface Product {
+  id: string;
+  slug: string;
+  title: string;
+  metadata: {
+    name: string;
+    description: string;
+    whats_included: Array<{
+      item: string;
+      description: string;
+    }>;
+    price: string;
+    buy_now_link: string;
+    featured_image?: {
+      url: string;
+      imgix_url: string;
+    };
+    cta_copy: string;
+    benefits: string[];
+  };
+}
+
+interface RoadmapDay {
+  id: string;
+  slug: string;
+  title: string;
+  metadata: {
+    day_number: number;
+    title: string;
+    summary: string;
+    icon: string;
+    image?: {
+      url: string;
+      imgix_url: string;
+    };
+    key_takeaway: string;
+  };
+}
+
+interface Testimonial {
+  id: string;
+  slug: string;
+  title: string;
+  metadata: {
+    quote: string;
+    name: string;
+    image?: {
+      url: string;
+      imgix_url: string;
+    };
+    relationship_context: string;
+    featured: boolean;
+    star_rating: number;
+  };
+}
+
+interface FAQ {
+  id: string;
+  slug: string;
+  title: string;
+  metadata: {
+    question: string;
+    answer: string;
+    category: {
+      key: string;
+      value: string;
+    };
+    order: number;
+    featured: boolean;
+  };
+}
+
+interface CTABlock {
+  id: string;
+  slug: string;
+  title: string;
+  metadata: {
+    heading: string;
+    subheading: string;
+    button_text: string;
+    button_url: string;
+    background_image?: {
+      url: string;
+      imgix_url: string;
+    };
+    background_color: string;
+    name: string;
+  };
+}
+
 async function getCoursePage(): Promise<CoursePage | null> {
   try {
     const response = await cosmic.objects
@@ -43,6 +132,88 @@ async function getCoursePage(): Promise<CoursePage | null> {
       .props(['id', 'title', 'slug', 'metadata'])
       .depth(1);
     return response.object as CoursePage;
+  } catch (error) {
+    if (hasStatus(error) && error.status === 404) {
+      return null;
+    }
+    throw error;
+  }
+}
+
+async function getProduct(): Promise<Product | null> {
+  try {
+    const response = await cosmic.objects
+      .findOne({ type: 'product' })
+      .props(['id', 'title', 'slug', 'metadata'])
+      .depth(1);
+    return response.object as Product;
+  } catch (error) {
+    if (hasStatus(error) && error.status === 404) {
+      return null;
+    }
+    throw error;
+  }
+}
+
+async function getRoadmapDays(): Promise<RoadmapDay[]> {
+  try {
+    const response = await cosmic.objects
+      .find({ type: 'visual-roadmap' })
+      .props(['id', 'title', 'slug', 'metadata'])
+      .depth(1)
+      .sort('metadata.day_number');
+    return response.objects as RoadmapDay[];
+  } catch (error) {
+    if (hasStatus(error) && error.status === 404) {
+      return [];
+    }
+    throw error;
+  }
+}
+
+async function getTestimonials(): Promise<Testimonial[]> {
+  try {
+    const response = await cosmic.objects
+      .find({ type: 'testimonials' })
+      .props(['id', 'title', 'slug', 'metadata'])
+      .depth(1)
+      .limit(10);
+    return response.objects as Testimonial[];
+  } catch (error) {
+    if (hasStatus(error) && error.status === 404) {
+      return [];
+    }
+    throw error;
+  }
+}
+
+async function getFAQs(): Promise<FAQ[]> {
+  try {
+    const response = await cosmic.objects
+      .find({ type: 'faqs' })
+      .props(['id', 'title', 'slug', 'metadata'])
+      .depth(1)
+      .sort('metadata.order')
+      .limit(6);
+    return response.objects as FAQ[];
+  } catch (error) {
+    if (hasStatus(error) && error.status === 404) {
+      return [];
+    }
+    throw error;
+  }
+}
+
+async function getCTABlock(): Promise<CTABlock | null> {
+  try {
+    const response = await cosmic.objects
+      .findOne({ 
+        type: 'cta-blocks',
+        slug: 'course-hero-cta'
+      })
+      .props(['id', 'title', 'slug', 'metadata'])
+      .depth(1);
+    return response.object as CTABlock;
   } catch (error) {
     if (hasStatus(error) && error.status === 404) {
       return null;
@@ -68,7 +239,15 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function CoursePage() {
-  const page = await getCoursePage();
+  // Fetch all required data
+  const [page, product, roadmapDays, testimonials, faqs, ctaBlock] = await Promise.all([
+    getCoursePage(),
+    getProduct(),
+    getRoadmapDays(),
+    getTestimonials(),
+    getFAQs(),
+    getCTABlock()
+  ]);
 
   if (!page) {
     return (
@@ -130,19 +309,28 @@ export default async function CoursePage() {
       </section>
 
       {/* Product Showcase */}
-      <ProductShowcase />
+      {product && <ProductShowcase product={product} />}
 
       {/* Visual Roadmap */}
-      <VisualRoadmap />
+      <VisualRoadmap days={roadmapDays} content={{
+        title: "Your 5-Day Journey",
+        subtitle: "Each day builds on the last, creating a comprehensive transformation"
+      }} />
 
       {/* Testimonials */}
-      <TestimonialsSection />
+      <TestimonialsSection testimonials={testimonials} content={{
+        title: "What Couples Are Saying",
+        subtitle: "Real results from real relationships"
+      }} />
 
       {/* FAQ Preview */}
-      <FAQPreview />
+      <FAQPreview faqs={faqs} content={{
+        title: "Frequently Asked Questions",
+        subtitle: "Everything you need to know before starting your journey"
+      }} />
 
       {/* Final CTA */}
-      <CTASection />
+      {ctaBlock && <CTASection content={ctaBlock} />}
     </div>
   );
 }
