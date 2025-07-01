@@ -1,7 +1,7 @@
 import { cosmic, hasStatus } from '@/lib/cosmic';
 import type { Metadata } from 'next';
 import ProductShowcase from '@/components/ProductShowcase';
-import VisualRoadmap from '@/components/VisualRoadman';
+import VisualRoadmap from '@/components/VisualRoadmap';
 import FAQPreview from '@/components/FAQPreview';
 import TestimonialsSection from '@/components/TestimonialsSection';
 import CTASection from '@/components/CTASection';
@@ -207,6 +207,17 @@ export default async function CoursePage() {
     metadata: {}
   };
 
+  // Convert CTABlock to HomepageContent if it exists
+  const ctaContent: HomepageContent | null = ctaBlock ? {
+    id: ctaBlock.id,
+    slug: ctaBlock.slug,
+    title: ctaBlock.title,
+    type_slug: 'homepage-content',
+    created_at: ctaBlock.created_at,
+    modified_at: ctaBlock.modified_at,
+    metadata: ctaBlock.metadata
+  } : null;
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -266,7 +277,7 @@ export default async function CoursePage() {
       <FAQPreview faqs={faqs} content={faqContent} />
 
       {/* Final CTA */}
-      {ctaBlock && <CTASection content={ctaBlock} />}
+      {ctaContent && <CTASection content={ctaContent} />}
     </div>
   );
 }
