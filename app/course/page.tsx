@@ -1,10 +1,11 @@
 import { cosmic, hasStatus } from '@/lib/cosmic';
 import type { Metadata } from 'next';
 import ProductShowcase from '@/components/ProductShowcase';
-import VisualRoadmap from '@/components/VisualRoadmap';
+import VisualRoadmap from '@/components/VisualRoadman';
 import FAQPreview from '@/components/FAQPreview';
 import TestimonialsSection from '@/components/TestimonialsSection';
 import CTASection from '@/components/CTASection';
+import type { Product, RoadmapDay, Testimonial, FAQ, CTABlock, HomepageContent } from '@/types';
 
 interface PageMetadata {
   title: string;
@@ -33,118 +34,6 @@ interface CoursePage {
   created_at: string;
   modified_at: string;
   metadata: PageMetadata;
-}
-
-interface Product {
-  id: string;
-  slug: string;
-  title: string;
-  type_slug: string;
-  created_at: string;
-  modified_at: string;
-  metadata: {
-    name: string;
-    description: string;
-    whats_included: Array<{
-      item: string;
-      description: string;
-    }>;
-    price: string;
-    buy_now_link: string;
-    featured_image?: {
-      url: string;
-      imgix_url: string;
-    };
-    cta_copy: string;
-    benefits: string[];
-  };
-}
-
-interface RoadmapDay {
-  id: string;
-  slug: string;
-  title: string;
-  type_slug: string;
-  created_at: string;
-  modified_at: string;
-  metadata: {
-    day_number: number;
-    title: string;
-    summary: string;
-    icon: string;
-    image?: {
-      url: string;
-      imgix_url: string;
-    };
-    key_takeaway: string;
-  };
-}
-
-interface Testimonial {
-  id: string;
-  slug: string;
-  title: string;
-  type_slug: string;
-  created_at: string;
-  modified_at: string;
-  metadata: {
-    quote: string;
-    name: string;
-    image?: {
-      url: string;
-      imgix_url: string;
-    };
-    relationship_context: string;
-    featured: boolean;
-    star_rating: number;
-  };
-}
-
-interface FAQ {
-  id: string;
-  slug: string;
-  title: string;
-  type_slug: string;
-  created_at: string;
-  modified_at: string;
-  metadata: {
-    question: string;
-    answer: string;
-    category: {
-      key: string;
-      value: string;
-    };
-    order: number;
-    featured: boolean;
-  };
-}
-
-interface CTABlock {
-  id: string;
-  slug: string;
-  title: string;
-  type_slug: string;
-  created_at: string;
-  modified_at: string;
-  metadata: {
-    heading: string;
-    subheading: string;
-    button_text: string;
-    button_url: string;
-    background_image?: {
-      url: string;
-      imgix_url: string;
-    };
-    background_color: string;
-    name: string;
-  };
-}
-
-interface HomepageContent {
-  type_slug: string;
-  created_at: string;
-  modified_at: string;
-  title: string;
 }
 
 async function getCoursePage(): Promise<CoursePage | null> {
@@ -287,6 +176,37 @@ export default async function CoursePage() {
 
   const { metadata } = page;
 
+  // Create properly typed HomepageContent objects for component props
+  const roadmapContent: HomepageContent = {
+    id: 'roadmap-content',
+    slug: 'roadmap-content',
+    title: "Your 5-Day Journey",
+    type_slug: 'homepage-content',
+    created_at: new Date().toISOString(),
+    modified_at: new Date().toISOString(),
+    metadata: {}
+  };
+
+  const testimonialsContent: HomepageContent = {
+    id: 'testimonials-content',
+    slug: 'testimonials-content',
+    title: "What Couples Are Saying",
+    type_slug: 'homepage-content',
+    created_at: new Date().toISOString(),
+    modified_at: new Date().toISOString(),
+    metadata: {}
+  };
+
+  const faqContent: HomepageContent = {
+    id: 'faq-content',
+    slug: 'faq-content',
+    title: "Frequently Asked Questions",
+    type_slug: 'homepage-content',
+    created_at: new Date().toISOString(),
+    modified_at: new Date().toISOString(),
+    metadata: {}
+  };
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -337,28 +257,13 @@ export default async function CoursePage() {
       {product && <ProductShowcase product={product} />}
 
       {/* Visual Roadmap */}
-      <VisualRoadmap days={roadmapDays} content={{
-        title: "Your 5-Day Journey",
-        type_slug: 'homepage-content',
-        created_at: '',
-        modified_at: ''
-      } as HomepageContent} />
+      <VisualRoadmap days={roadmapDays} content={roadmapContent} />
 
       {/* Testimonials */}
-      <TestimonialsSection testimonials={testimonials} content={{
-        title: "What Couples Are Saying",
-        type_slug: 'homepage-content',
-        created_at: '',
-        modified_at: ''
-      } as HomepageContent} />
+      <TestimonialsSection testimonials={testimonials} content={testimonialsContent} />
 
       {/* FAQ Preview */}
-      <FAQPreview faqs={faqs} content={{
-        title: "Frequently Asked Questions",
-        type_slug: 'homepage-content',
-        created_at: '',
-        modified_at: ''
-      } as HomepageContent} />
+      <FAQPreview faqs={faqs} content={faqContent} />
 
       {/* Final CTA */}
       {ctaBlock && <CTASection content={ctaBlock} />}
